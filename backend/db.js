@@ -3,7 +3,7 @@ const mongoose = require('mongoose');
 main().catch(err => console.log(err));
 
 async function main() {
-    const db_url = 'mongodb://localhost:27017/paytm';
+    const db_url = 'mongodb://localhost:27017,localhost:27018,localhost:27019/paytm?replicaSet=rs';
     await mongoose.connect(db_url).then(() => {
         console.log('Connected to the database');
     });
@@ -38,8 +38,22 @@ const userSchema = new mongoose.Schema({
     }
 });
 
-const User = mongoose.Model('User', userSchema);
+const accountSchema = new mongoose.Schema({
+    userId: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'User',
+        required: true
+    },
+    balance: {
+        type: Number,
+        required: true
+    }
+})
+
+const Account = mongoose.model('Account', accountSchema);
+const User = mongoose.model('User', userSchema);
 
 module.exports = { 
-    User 
+    User,
+    Account 
 };

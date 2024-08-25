@@ -1,11 +1,14 @@
 const express = require("express");
 const app = express();
 const PORT = 3000;
-const { rootRouter } = require("./routes/index");
+const cors = require("cors");
 
-app.use('/api/v1', router);
 app.use(cors());
 app.use(express.json());
+
+const { rootRouter } = require("./routes/index");
+
+app.use('/api/v1', rootRouter);
 
 app.listen(PORT, function (err) {
     if (err) console.log(err);
